@@ -1,19 +1,28 @@
 package io.spring.boot.command;
 
 import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+@RefreshScope
+@RestController
 public class LatestNewsCommand {
-
-	public void getTopStories() throws RestClientException, IOException {
-
-		String baseUrl = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=1b63af57b5db4be198a9a82fa27ddf7d";
+	
+	@Value("${news.uri}")
+	private String baseUrl;
+	
+	@RequestMapping("/news")
+	public String getTopStories() throws RestClientException, IOException {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Object> response=null;
 		try{
@@ -23,7 +32,7 @@ public class LatestNewsCommand {
 		{
 			System.out.println(ex);
 		}
-		System.out.println(response.getBody());
+		return response.getBody().toString();
 	}
 
 	private static HttpEntity<?> getHeaders() throws IOException {
