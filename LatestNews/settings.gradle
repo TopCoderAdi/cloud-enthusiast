@@ -17,4 +17,4 @@ include 'services:webservice'
 
 rootProject.name = 'LatestNews'
 include 'latest-news-repo'
-include 'Eureka-server'
+include 'eureka-server'
